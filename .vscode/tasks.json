@@ -1,0 +1,113 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "rebuild",
+            "type": "shell",
+            "command": [
+                // "rm -rf ./build;",
+                "remove-item './build' -recurse -force -ErrorAction Ignore;",
+                
+                "mkdir build;",
+                "cd build;",
+                "cmake -GNinja ..;",
+                "ninja -j8;"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": [
+                "cd build;",
+                "cmake -GNinja ..;",
+                "ninja -j8;"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "run ctest",
+            "type": "shell",
+            "command": [
+                "cd build;",
+                "cmake -GNinja ..;",
+                "make;",
+                "ctest;"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Coverage",
+            "type": "shell",
+            "command": [
+                "cd ${workspaceFolder};",
+                "rm -r build;",
+                "mkdir build;",
+                "cd build;",
+                "cmake -GNinja -D CMAKE_BUILD_TYPE=Coverage .. ;",
+                "make -j $(nproc);",
+                "ctest;",
+                "mkdir -p ./coverage;",
+                "lcov -c -d . --rc lcov_branch_coverage=1 -o ./coverage/out_uc.lcov;",
+                "lcov -r ./coverage/out_uc.lcov '/usr/local/*' '/usr/include/*' '8/*' '*test/*' -o ./coverage/out.lcov; ",
+                "rm -rf ./results/;",
+                "genhtml ./coverage/out.lcov -o ./results;"
+            ],
+            "args": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "Doxygen",
+            "type": "shell",
+            "command": [
+                "cd ${workspaceFolder};",
+                "doxygen Doxyfile;"
+            ],
+            "dependsOn": [
+                "rebuild"
+            ],
+            "args": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        }
+    ]
+}
