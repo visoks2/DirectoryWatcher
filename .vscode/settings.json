@@ -80,6 +80,7 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "cerrno": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "codecvt": "cpp"
     }
 }

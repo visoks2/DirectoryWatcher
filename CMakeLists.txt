@@ -1,26 +1,34 @@
 cmake_minimum_required (VERSION 3.19)
 #
-set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY") # https://stackoverflow.com/a/53635241/8653778
+option(BUILD_64BIT 		"build 64bit app" 		 	ON)
+option(WITH_TEST 		"build test" 				OFF)
+option(WITH_COVERAGE 	"generate coverage report" 	OFF)
+option(WITH_DOC 		"generate doxygen report" 	OFF)
+#
+#
+#
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 # Enable c++ language
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_COMPILER "clang.exe")
 set(CMAKE_CXX_COMPILER "clang++.exe")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3")
+
+if (BUILD_64BIT)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
+else()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+endif()
 #
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY") # https://stackoverflow.com/a/53635241/8653778
 enable_language(CXX)
-#
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 #
 project (WatcherApp)
 #
 # find_package (Threads REQUIRED)
 # find_package (Protobuf REQUIRED)
-#   
-option(WITH_TEST 		"build test" 				OFF)
-option(WITH_COVERAGE 	"generate coverage report" 	OFF)
-option(WITH_DOC 		"generate doxygen report" 	OFF)
 #
 add_subdirectory(app)
 #
