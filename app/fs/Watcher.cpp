@@ -82,19 +82,19 @@ void Watcher::thread_watch()
 
             switch (fni->Action) {
             case FILE_ACTION_ADDED:
-                newEntry.eventCreated = true;
+                newEntry.event = DirectoryChangeEvent::Created;
                 break;
             case FILE_ACTION_REMOVED:
-                newEntry.eventDeleted = true;
+                newEntry.event = DirectoryChangeEvent::Deleted;
                 break;
             case FILE_ACTION_MODIFIED:
-                newEntry.eventModified = true;
+                newEntry.event = DirectoryChangeEvent::Modified;
                 break;
             case FILE_ACTION_RENAMED_OLD_NAME:
-                newEntry.eventMovedFrom = true;
+                newEntry.event = DirectoryChangeEvent::MovedFrom;
                 break;
             case FILE_ACTION_RENAMED_NEW_NAME:
-                newEntry.eventMovedTo = true;
+                newEntry.event = DirectoryChangeEvent::MovedTo;
                 break;
             default:
                 throw std::logic_error(

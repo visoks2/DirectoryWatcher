@@ -81,6 +81,7 @@
         "xutility": "cpp",
         "cerrno": "cpp",
         "queue": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "*.rh": "cpp"
     }
 }

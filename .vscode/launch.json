@@ -9,7 +9,7 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/app/MyApp.exe",
-            "args": ["${workspaceFolder}"],
+            "args": ["../_test", "../_backup"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

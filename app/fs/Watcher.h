@@ -17,12 +17,16 @@ namespace fs
 class Watcher
 {
   public:
+    enum class DirectoryChangeEvent : uint8_t {
+        Created,
+        Deleted,
+        Modified,
+        MovedTo,
+        MovedFrom,
+    };
+
     struct DirectoryChange {
-        bool eventCreated{false};
-        bool eventDeleted{false};
-        bool eventModified{false};
-        bool eventMovedTo{false};
-        bool eventMovedFrom{false};
+        DirectoryChangeEvent event;
         std::filesystem::path path{};
     };
 
