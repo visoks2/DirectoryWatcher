@@ -59,34 +59,52 @@ void App::processChanges(fs::Watcher::DirectoryChangeList &changes, fs::Watcher:
     changesToProcessLater.clear();
     for (const auto &it : changes) {
         filesystem::path changeBackupPath{m_options.backupFolderPath / filesystem::relative(it.path, m_options.watchFolderPath)}; // TODO:!!! careful, need asserts
+        changeBackupPath = changeBackupPath.lexically_normal();
 
         // if (!filesystem::is_directory(it.path))
-        //     changeBackupPath.append(".bak");
-
         error_code err;
         switch (it.event) {
         case DirectoryChangeEvent::Created:
-            filesystem::copy(it.path, changeBackupPath, filesystem::copy_options::update_existing, err);
+            if (filesystem::is_directory(it.path)) {
+                filesystem::create_directories(changeBackupPath, err);
+            } else {
+                changeBackupPath += BACKUP_FILE_SUFFIX;
+                filesystem::copy(it.path, changeBackupPath, filesystem::copy_options::update_existing, err);
+            }
+
             if (err)
                 changesToProcessLater.push_back(move(it));
             else
                 m_db.insert({it.event, changeBackupPath});
             break;
         case DirectoryChangeEvent::Deleted:
-            filesystem::remove_all(changeBackupPath);
+            if (filesystem::is_directory(changeBackupPath))
+                filesystem::remove_all(changeBackupPath, err);
+            else {
+                changeBackupPath += BACKUP_FILE_SUFFIX;
+                filesystem::remove_all(changeBackupPath, err);
+            }
+
             m_db.insert({it.event, changeBackupPath});
             break;
         case DirectoryChangeEvent::Modified:
-            filesystem::copy(it.path, changeBackupPath, filesystem::copy_options::update_existing, err);
-            if (err.value() == 32) //!!  err 32, The process cannot access the file because it is being used by another process.
-                changesToProcessLater.push_back(move(it));
-            else
-                m_db.insert({it.event, changeBackupPath});
+            if (!filesystem::is_directory(it.path)) {
+                changeBackupPath += BACKUP_FILE_SUFFIX;
+                filesystem::copy(it.path, changeBackupPath, filesystem::copy_options::update_existing, err);
+
+                if (err.value() == 32) //!!  err 32, The process cannot access the file because it is being used by another process.
+                    changesToProcessLater.push_back(move(it));
+                else
+                    m_db.insert({it.event, changeBackupPath});
+            }
             break;
         case DirectoryChangeEvent::MovedTo:
+            if (!filesystem::is_directory(it.path))
+                changeBackupPath += BACKUP_FILE_SUFFIX;
             filesystem::rename(lastMove, changeBackupPath, err);
-            if (err.value() == 32) {                                                          //!!  err 32, The process cannot access the file because it is being used by another process.
-                changesToProcessLater.push_back({DirectoryChangeEvent::MovedFrom, lastMove}); // nooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+            if (err.value() == 32) { //!!  err 32, The process cannot access the file because it is being used by another process.
+                changesToProcessLater.push_back({DirectoryChangeEvent::MovedFrom, lastMove});
                 changesToProcessLater.push_back(move(it));
             } else {
                 m_db.insert({DirectoryChangeEvent::MovedFrom, lastMove});
@@ -95,6 +113,8 @@ void App::processChanges(fs::Watcher::DirectoryChangeList &changes, fs::Watcher:
             detectedMoveStart = false;
             break;
         case DirectoryChangeEvent::MovedFrom:
+            if (!filesystem::is_directory(changeBackupPath))
+                changeBackupPath += BACKUP_FILE_SUFFIX;
             lastMove = changeBackupPath;
             detectedMoveStart = true;
             break;

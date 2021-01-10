@@ -11,6 +11,7 @@ class App
     void run();
 
   private:
+    static constexpr auto *BACKUP_FILE_SUFFIX = ".bak";
     using Watcher = fs::Watcher;
     using DirectoryChangeList = fs::Watcher::DirectoryChangeList;
     using DirectoryChange = fs::Watcher::DirectoryChange;
