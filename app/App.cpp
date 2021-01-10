@@ -9,17 +9,22 @@ App::App(const CommandLineOptions &options)
     : m_options(options)
     , m_db()
 {
-
-    std::error_code err;
-    std::filesystem::create_directory(m_options.backupFolderPath, err);
-    if (err) {
-        throw std::runtime_error(err.message().c_str());
-    }
 }
 
 void App::run()
 {
     using namespace std;
+
+    if (m_options.showLog) {
+        m_db.select(m_options.showLog_pathRegex, m_options.showLog_dateFrom, m_options.showLog_dateTo);
+        return;
+    }
+
+    error_code err;
+    filesystem::create_directory(m_options.backupFolderPath, err);
+    if (err) {
+        throw runtime_error(err.message().c_str());
+    }
 
     Watcher watcher(m_options.watchFolderPath);
 

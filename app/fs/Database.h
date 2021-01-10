@@ -20,14 +20,14 @@ class Database final
     ~Database();
 
     void insert(const Watcher::DirectoryChange &record);
-    void select();
+    void select(const std::string &pathRegex, const std::string &dateFrom, const std::string &dateTo);
 
   private:
     void prepare();
     bool executeSqlQuery(const std::string &sql) noexcept;
     static constexpr int SQLITE_CALC_STRLEN = -1;
     static constexpr auto SQL_INSERT_FILECHANGE = "INSERT INTO FileChanges(Time,Action,Path) VALUES(datetime('now'), ?, ?);";
-    static constexpr auto SQL_SELECT_FILECHANGES = "SELECT Time,Action,Path FROM FileChanges WHERE Path REGEXP '(([A-Z])\\w+)';";
+    static constexpr auto SQL_SELECT_FILECHANGES = "SELECT Time,Action,Path FROM FileChanges;"; // WHERE Path REGEXP '(([A-Z])\\w+)'
     static constexpr auto SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS FileChanges("
                                              "Time DATETIME NOT NULL,"
                                              "Action INT NOT NULL,"
