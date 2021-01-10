@@ -47,3 +47,7 @@ class Watcher
 };
 
 } // namespace fs
+namespace std
+{
+std::string to_string(fs::Watcher::DirectoryChangeEvent t);
+}

@@ -1,7 +1,7 @@
 #include "Watcher.h"
 
-#include <cstring>
 #include <exception>
+#include <map>
 #include <string>
 namespace fs
 {
@@ -23,7 +23,7 @@ Watcher::Watcher(const std::filesystem::path &path)
                     nullptr);
     if (hDir == INVALID_HANDLE_VALUE) {
         m_hNotif = nullptr;
-        throw std::exception("CreateFileA failed");
+        throw std::runtime_error("CreateFileA failed");
     }
 
     m_hNotif = hDir;
@@ -71,7 +71,7 @@ void Watcher::thread_watch()
             int actLen = WideCharToMultiByte(CP_UTF8, 0, fni->FileName, fni->FileNameLength >> 1, &tmpBuf[0], tmpBuf.size(), nullptr, nullptr);
 
             if (actLen <= 0)
-                throw std::exception("Error converting filename from WCHAR* to UTF8");
+                throw std::runtime_error("Error converting filename from WCHAR* to UTF8");
 
             const std::string filName(&tmpBuf[0], actLen);
 
@@ -107,5 +107,18 @@ void Watcher::thread_watch()
         }
     }
 }
-
 } // namespace fs
+namespace std
+{
+std::string to_string(fs::Watcher::DirectoryChangeEvent t)
+{
+    static const std::map<fs::Watcher::DirectoryChangeEvent, const char *> nameMap{
+        {fs::Watcher::DirectoryChangeEvent::Created, "Created"},
+        {fs::Watcher::DirectoryChangeEvent::Deleted, "Deleted"},
+        {fs::Watcher::DirectoryChangeEvent::Modified, "Modified"},
+        {fs::Watcher::DirectoryChangeEvent::MovedTo, "MovedTo"},
+        {fs::Watcher::DirectoryChangeEvent::MovedFrom, "MovedFrom"}};
+    auto it = nameMap.find(t);
+    return it == nameMap.end() ? "Unknown Value" : it->second;
+}
+} // namespace std

@@ -1,5 +1,4 @@
-something something 
-watch windows directory and do some stuff accordingly 
+watch windows directory and do some stuff if something is changed 
 
 to ease the pain of installing packages in windows use package management tool ^_^
 i.e. https://chocolatey.org/install
@@ -7,7 +6,7 @@ i.e. https://chocolatey.org/install
  - choco install cmake
  - choco install llvm
  - choco install ninja
- 
+
 ```
     mkdir build
     cd build

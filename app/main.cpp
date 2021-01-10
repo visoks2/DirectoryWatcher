@@ -1,5 +1,6 @@
-#include "App.hpp"
+#include "App.h"
 #include "CommandLineOptions.h"
+#include <iostream>
 
 int main(int argc, char const *argv[])
 {
