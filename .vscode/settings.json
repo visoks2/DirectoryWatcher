@@ -82,6 +82,7 @@
         "cerrno": "cpp",
         "queue": "cpp",
         "codecvt": "cpp",
-        "*.rh": "cpp"
+        "*.rh": "cpp",
+        "xtree": "cpp"
     }
 }

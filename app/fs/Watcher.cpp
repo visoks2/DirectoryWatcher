@@ -3,7 +3,6 @@
 #include <cstring>
 #include <exception>
 #include <string>
-
 namespace fs
 {
 
@@ -72,8 +71,7 @@ void Watcher::thread_watch()
             int actLen = WideCharToMultiByte(CP_UTF8, 0, fni->FileName, fni->FileNameLength >> 1, &tmpBuf[0], tmpBuf.size(), nullptr, nullptr);
 
             if (actLen <= 0)
-                throw std::exception(
-                    "Error converting filename from WCHAR* to UTF8");
+                throw std::exception("Error converting filename from WCHAR* to UTF8");
 
             const std::string filName(&tmpBuf[0], actLen);
 
@@ -97,8 +95,7 @@ void Watcher::thread_watch()
                 newEntry.event = DirectoryChangeEvent::MovedTo;
                 break;
             default:
-                throw std::logic_error(
-                    "unexpected FILE_NOTIFY_INFORMATION action");
+                throw std::logic_error("unexpected FILE_NOTIFY_INFORMATION action");
             }
             std::lock_guard<std::mutex> lock(m_directoryChangesMutex);
             m_directoryChanges.push_back(newEntry);

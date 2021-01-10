@@ -3,12 +3,18 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/3rdParty/SQLite3/*"
+            ],
+            "browse": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/3rdParty/SQLite3/*"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "WIN32",
             ],
             "windowsSdkVersion": "10.0.18362.0",
             "compilerPath": "C:/Program Files/LLVM/bin/clang.exe",

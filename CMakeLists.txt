@@ -9,7 +9,10 @@ option(WITH_DOC 		"generate doxygen report" 	OFF)
 #
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+# Paths
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_THIRD_PARTY_DIR ${CMAKE_SOURCE_DIR}/3rdParty)
+set(CMAKE_PREFIX_PATH ${CMAKE_THIRD_PARTY_DIR})
 # Enable c++ language
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_COMPILER "clang.exe")
@@ -29,6 +32,13 @@ project (WatcherApp)
 #
 # find_package (Threads REQUIRED)
 # find_package (Protobuf REQUIRED)
+# if (NOT SQLite3_FOUND)
+include(FetchContent)
+include(ExternalProject)
+include(Build-sqlite3)
+# find_package(SQLite3 REQUIRED)
+# endif ()
+
 #
 add_subdirectory(app)
 #

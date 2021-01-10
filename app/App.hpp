@@ -1,5 +1,6 @@
 #pragma once
 #include "CommandLineOptions.h"
+#include "fs/Database.hpp"
 #include "fs/Watcher.h"
 #include <chrono>
 #include <filesystem>
@@ -7,6 +8,7 @@
 #include <stdio.h>
 #include <string>
 #include <thread>
+
 // TODO: remove
 constexpr bool NoFileSystemChanges = false;
 
@@ -15,6 +17,7 @@ class App
   public:
     App(const CommandLineOptions &options)
         : m_options(options)
+        , m_db()
     {
         std::error_code err;
         std::filesystem::create_directory(m_options.backupFolderPath, err);
@@ -106,9 +109,12 @@ class App
             cout << endl;
             if (err)
                 cout << err.message() << endl;
+            else
+                m_db.insert(it);
         }
     }
     const CommandLineOptions &m_options;
+    fs::Database m_db;
     // WIP
     std::filesystem::path lastMove;
     bool detectedMoveStart;
