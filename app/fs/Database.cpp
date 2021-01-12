@@ -55,7 +55,7 @@ void Database::insert(const Watcher::DirectoryChange &record)
     }
 
     const auto path = record.path.generic_string();
-    bool result = sqlite3_bind_int(m_insertStatement, 1, static_cast<int>(record.event)) == SQLITE_OK;
+    bool result = sqlite3_bind_int(m_insertStatement, 1, static_cast<int>(record.changeType)) == SQLITE_OK;
     result &= sqlite3_bind_text(m_insertStatement, 2, path.c_str(), -1, nullptr) == SQLITE_OK;
     if (!result) {
         throw std::runtime_error("sqlite3_bind error");
@@ -103,7 +103,7 @@ void Database::select(const std::string &pathRegex, const std::string &dateFrom,
 
     while (sqlite3_step(m_selectStatement) == SQLITE_ROW) {
         const auto *datetime = sqlite3_column_text(m_selectStatement, 0);
-        const auto action = std::to_string(static_cast<Watcher::DirectoryChangeEvent>(sqlite3_column_int(m_selectStatement, 1)));
+        const auto action = std::to_string(static_cast<Watcher::ChangeType>(sqlite3_column_int(m_selectStatement, 1)));
         const auto *path = sqlite3_column_text(m_selectStatement, 2);
 
         std::cout << std::left << std::setw(25) << datetime

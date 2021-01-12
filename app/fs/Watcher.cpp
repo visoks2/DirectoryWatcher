@@ -80,19 +80,19 @@ void Watcher::thread_watch()
 
             switch (fni->Action) {
             case FILE_ACTION_ADDED:
-                newEntry.event = DirectoryChangeEvent::Created;
+                newEntry.changeType = ChangeType::Created;
                 break;
             case FILE_ACTION_REMOVED:
-                newEntry.event = DirectoryChangeEvent::Deleted;
+                newEntry.changeType = ChangeType::Deleted;
                 break;
             case FILE_ACTION_MODIFIED:
-                newEntry.event = DirectoryChangeEvent::Modified;
+                newEntry.changeType = ChangeType::Modified;
                 break;
             case FILE_ACTION_RENAMED_OLD_NAME:
-                newEntry.event = DirectoryChangeEvent::MovedFrom;
+                newEntry.changeType = ChangeType::MovedFrom;
                 break;
             case FILE_ACTION_RENAMED_NEW_NAME:
-                newEntry.event = DirectoryChangeEvent::MovedTo;
+                newEntry.changeType = ChangeType::MovedTo;
                 break;
             default:
                 throw std::logic_error("unexpected FILE_NOTIFY_INFORMATION action");
@@ -110,14 +110,14 @@ void Watcher::thread_watch()
 } // namespace fs
 namespace std
 {
-std::string to_string(fs::Watcher::DirectoryChangeEvent t)
+std::string to_string(fs::Watcher::ChangeType t)
 {
-    static const std::map<fs::Watcher::DirectoryChangeEvent, const char *> nameMap{
-        {fs::Watcher::DirectoryChangeEvent::Created, "Created"},
-        {fs::Watcher::DirectoryChangeEvent::Deleted, "Deleted"},
-        {fs::Watcher::DirectoryChangeEvent::Modified, "Modified"},
-        {fs::Watcher::DirectoryChangeEvent::MovedTo, "MovedTo"},
-        {fs::Watcher::DirectoryChangeEvent::MovedFrom, "MovedFrom"}};
+    static const std::map<fs::Watcher::ChangeType, const char *> nameMap{
+        {fs::Watcher::ChangeType::Created, "Created"},
+        {fs::Watcher::ChangeType::Deleted, "Deleted"},
+        {fs::Watcher::ChangeType::Modified, "Modified"},
+        {fs::Watcher::ChangeType::MovedTo, "MovedTo"},
+        {fs::Watcher::ChangeType::MovedFrom, "MovedFrom"}};
     auto it = nameMap.find(t);
     return it == nameMap.end() ? "Unknown Value" : it->second;
 }

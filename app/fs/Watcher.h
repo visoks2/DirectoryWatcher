@@ -17,7 +17,7 @@ namespace fs
 class Watcher
 {
   public:
-    enum class DirectoryChangeEvent : uint8_t {
+    enum class ChangeType : uint8_t {
         Created,
         Deleted,
         Modified,
@@ -26,7 +26,7 @@ class Watcher
     };
 
     struct DirectoryChange {
-        DirectoryChangeEvent event;
+        ChangeType changeType;
         std::filesystem::path path{};
     };
 
@@ -49,5 +49,5 @@ class Watcher
 } // namespace fs
 namespace std
 {
-std::string to_string(fs::Watcher::DirectoryChangeEvent t);
+std::string to_string(fs::Watcher::ChangeType t);
 }

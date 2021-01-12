@@ -15,19 +15,11 @@ class App
     using Watcher = fs::Watcher;
     using DirectoryChangeList = fs::Watcher::DirectoryChangeList;
     using DirectoryChange = fs::Watcher::DirectoryChange;
-    using DirectoryChangeEvent = fs::Watcher::DirectoryChangeEvent;
+    using ChangeType = fs::Watcher::ChangeType;
 
     static void removeDuplicates(fs::Watcher::DirectoryChangeList &changes);
     void processChanges(fs::Watcher::DirectoryChangeList &changes, fs::Watcher::DirectoryChangeList &changesToProcessLater);
-    // std::error_code onFileCreated()
-    // {
-    // }
-    // std::error_code onFileModified()
-    // {
-    // }
-    // std::error_code onFileCreated()
-    // {
-    // }
+    void recheckFiles();
 
     const CommandLineOptions &m_options;
     fs::Database m_db;
