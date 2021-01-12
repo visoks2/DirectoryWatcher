@@ -1,4 +1,7 @@
-watch windows directory and do some stuff if something is changed 
+3rdParty libs used:
+ - SQLite 
+
+to build... you'll need these packages: make, cmake, llvm, ninja
 
 to ease the pain of installing packages in windows use package management tool ^_^
 i.e. https://chocolatey.org/install
@@ -7,6 +10,7 @@ i.e. https://chocolatey.org/install
  - choco install llvm
  - choco install ninja
 
+build project via command line (also there are "build" and "rebuild" tasks for vscode)
 ```
     mkdir build
     cd build

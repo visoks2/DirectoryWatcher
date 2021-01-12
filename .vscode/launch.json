@@ -12,11 +12,12 @@
             // "args": ["../_test", "../_backup" , "--showlog", "--path", "(([A-Z])\\w+)", "--dateFrom", "2021-01-10 20:40:00", "--dateTo", "2021-01-10 20:45:00"],
             // .\build\app\MyApp.exe ../_test ../_backup --showlog --path '(([A-Z])\w+)' --dateFrom '2021-01-10 20:40:00' --dateTo '2021-01-10 20:45:00'
             
-            // "args": ["../_test", "../_backup" , "--showlog", "--dateFrom", "2021-01-10 20:40:00", "--dateTo", "2021-01-10 20:45:00"], 
+            "args": ["../_test", "../_backup" , "--showlog", "--dateFrom", "2021-01-10 20:40:00", "--dateTo", "2021-01-10 20:45:00"], 
             // "args": ["../_test", "../_backup" , "--showlog", "--path", "(([A-Z])\\w+)", "--dateFrom", "2021-01-11"],
             // "args": ["../_test", "../_backup" , "--showlog", "--path", "(([A-Z])\\w+)", "--dateFrom", "2021-01-10"],
             // "args": ["../_test", "../_backup" , "--showlog", "--path", "(([A-Z])\\w+)"],
-            "args": ["../_test", "../_backup" ],
+            // "args": ["../_test", "../_backup" ],
+            // "args": ["-h"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

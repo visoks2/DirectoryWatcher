@@ -90,7 +90,6 @@ void Database::select(const std::string &pathRegex, const std::string &dateFrom,
     if (whereCondition.rdbuf()->in_avail()) {
         sql = sql.erase(sql.size() - 1) + " WHERE " + whereCondition.str() + " ;";
     }
-    std::cout << sql << std::endl;
     const char *psql = sql.c_str();
 
     if (SQLITE_OK != sqlite3_prepare_v2(m_db, psql, SQLITE_CALC_STRLEN, &m_selectStatement, nullptr)) {

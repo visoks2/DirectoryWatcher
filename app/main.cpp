@@ -3,13 +3,18 @@
 #include <iostream>
 constexpr auto *usage = "usage:\n"
                         "  MyApp.exe WATCH_DIR BACKUP_DIR \n"
-                        "or \n"
-                        "  MyApp.exe --showlog                  print file changes log\n"
-                        "  optional arguments: \n"
-                        "     --path REGEX                REGEX to filter file path i.e. --showlog --pathFilter '(([A-Z])\\w+)'\n"
-                        "     --dateFrom"
-                        "     --dateTo";
-
+                        "    Example:\n"
+                        "      MyApp.exe ../workingDir ../_backup\n"
+                        "  or \n"
+                        "  MyApp.exe --showlog             print file changes log\n"
+                        "    optional arguments: \n"
+                        "      --path REGEX                REGEX to filter file path\n"
+                        "      --dateFrom DATE             filter file changes by date\n"
+                        "      --dateTo DATE\n"
+                        "    Example:\n"
+                        "      MyApp.exe --showlog --path '(([A-Z])\\w+)'\n"
+                        "      MyApp.exe --showlog --path --dateFrom '2021-01-10'\n"
+                        "      MyApp.exe --showlog --path '(([A-Z])\\w+)' --dateFrom '2021-01-10 20:40:00' --dateTo '2021-01-10 20:45:00'\n";
 int main(int argc, char const *argv[])
 {
     if (argc < 2) {
@@ -61,7 +66,7 @@ int main(int argc, char const *argv[])
         std::cerr << e.what() << std::endl;
         return -1;
     } catch (...) {
-        std::cerr << "Sorry" << std::endl;
+        std::cerr << "unexpected error" << std::endl;
         return -1;
     }
 
